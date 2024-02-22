@@ -1,117 +1,153 @@
-const ROCK = 1
-const SCISSOR = 2
-const PAPER = 3
+const ROCK = 1;
+const SCISSOR = 2;
+const PAPER = 3;
+const DRAW = 0;
+const WIN = 1;
+const LOSE = -1;
+const resultObj = {
+    1: 'url("./assets/images/rock.png")',
+    2: 'url("./assets/images/scissor.png")',
+    3: 'url("./assets/images/paper.png")'
+}
+
+// DOM QUERRY
+//Result dom
+const resultDom = document.querySelector("#result");
+//Restart btn
+const restartBtn = document.querySelector("#restart");
+//Rock btn
+const rockBtn = document.querySelector("#rock");
+//Scissor btn
+const scissorBtn = document.querySelector("#scissor");
+//Paper btn
+const paperBtn = document.querySelector("#paper");
+//Player choice image
+const playerImage = document.querySelector("#player");
+//Computer choice image
+const computerImage = document.querySelector("#computer");
+//Player point
+const playerPointDom = document.querySelector("#user-point");
+//Computer point
+const computerPointDom = document.querySelector("#computer-point");
+//Round
+const roundDom = document.querySelector("#round");
+
+// Game variable
+const WINNER = 3;
+let userChoice = 0;
+let computerChoice = 0;
+let userWins = 0;
+let computerWins = 0;
+let gameEnd = false;
+
 // Function to get computer choice
 let getComputerChoice = () => {
     //Return value range from 1 to 3
-    return Math.floor(Math.random() * 2) + 1;
-}
-//Function to validate user choice
-let validateUserChoice = (choice) => {
-    choice = choice.toLowerCase();
-    if (choice === "rock" || choice === "paper" || choice === "scissor") {
-        return true
-    }
-    alert("You must enter 'Rock' or 'Scissor' or 'Paper'!!!")
-    return false
-}
-//Function to get user choice
-let getUserChoice = () => {
-    let choice
-    do {
-        choice = prompt("Please enter your choice for Rock-Scissor-Paper: ")
-    } while (!validateUserChoice(choice))
-    console.log(`User choice: ${choice}`)
-    return choice === "rock" ? 1 : (choice === "scissor" ? 2 : 3)
-}
-//Game play
-let gamePlay = () => {
-    let userChoice = getUserChoice()
-    let computerChoice = getComputerChoice()
-    if (userChoice === ROCK) {
-        if (computerChoice === ROCK) {
-            //Play again
-            console.log("Computer choice: rock")
-            alert("Tier")
-            return 0
-        }
-        if (computerChoice === SCISSOR) {
-            //User win
-            console.log("Computer choice: scissor")
-            alert("You win")
-            return 1
-        }
-        if (computerChoice === PAPER) {
-            //Computer win
-            console.log("Computer choice: paper")
-            alert("Computer win")
-            return -1
-        }
-    } 
-    if (userChoice === SCISSOR) {
-        if (computerChoice === SCISSOR) {
-            //Play again
-            console.log("Computer choice: scissor")
-            alert("Tier")
-            return 0
-        }
-        if (computerChoice === PAPER) {
-            //User win
-            console.log("Computer choice: paper")
-            alert("You win")
-            return 1
-        }
-        if (computerChoice === ROCK) {
-            //Computer win
-            alert("Computer win")
-            console.log("Computer choice: rock")
-            return -1
-        }
-    } 
-    if (userChoice === PAPER) { //PAPER
-        if (computerChoice === PAPER) {
-            //Play again
-            console.log("Computer choice: paper")
-            alert("Tier")
-            return 0
-        }
-        if (computerChoice === ROCK) {
-            //User win
-            console.log("Computer choice: rock")
-            alert("You win")
-            return 1
-        }
-        if (computerChoice === SCISSOR) {
-            //Computer win
-            console.log("Computer choice: scissor")
-            alert("Computer win")
-            return -1
-        }
-    }
+    return Math.floor(Math.random() * 3) + 1;
 }
 
-//Program
-//Play 3 round
-let round = 3
-let point = 0
-while (round > 0) {
-    let result = gamePlay()
-    if (result === 0) {//Tier
-        continue
-    } 
-    if (result === 1) {//User win
-        point++
-        round-- 
-    }
-    if (result === -1) {//Computer win
-        point--
-        round--
-    }
-}
-//Caculate score
-if (point <= 0) {
-    alert(`You lose ${3 + point}/3 games. HAHA`)
-} else if (point > 0) {
-    alert(`You win ${point}/3 games. Congrat!!!`)
+//Restart game
+let restartGame = () => {
+    userChoice = 0;
+    computerChoice = 0;
+    userWins = 0;
+    computerWins = 0;
+    gameEnd = false;
+    computerImage.style.backgroundImage = "";
+    playerImage.style.backgroundImage = "";
 }
 
+//Compare result
+let cmpResult = (userChoice, computerChoice) => {
+    let result = 0
+    if ((userChoice === ROCK && computerChoice == SCISSOR) || (userChoice === SCISSOR && computerChoice == PAPER) || (userChoice === PAPER && computerChoice == ROCK)) {
+        userWins++;
+        result = WIN;
+    } 
+    if ((computerChoice === ROCK && userChoice == SCISSOR) || (computerChoice === SCISSOR && userChoice == PAPER) || (computerChoice === PAPER && userChoice == ROCK)) {
+        computerWins++;
+        result = LOSE;
+    }
+    if (userChoice === computerChoice) {
+        result = DRAW;
+    }
+    showResult(userChoice, computerChoice);
+    logResult(userChoice, computerChoice, result);
+    updateRound();
+    return result;
+}
+
+//Log result
+let logResult = (userChoice, computerChoice, result) => {
+    let userVal = userChoice === ROCK ? "rock" : (userChoice === SCISSOR ? "scissor" : "paper");
+    let computerVal = computerChoice === ROCK ? "rock" : (computerChoice === SCISSOR ? "scissor" : "paper");
+    result = result === DRAW ? "draw" : (result === WIN ? "You win" : "You lose");
+    console.log(`Your choice: ${userVal}`);
+    console.log(`Computer choice: ${computerVal}`);
+    console.log(`Result: ${result}`);
+}
+
+//Show result
+let showResult = (userChoice, computerChoice) => {
+    computerImage.style.backgroundImage = resultObj[computerChoice];
+    playerImage.style.backgroundImage = resultObj[userChoice];
+}
+
+//Check winner
+let checkWinner = () => {
+    if (userWins === WINNER) {
+        gameEnd = true;
+        return "You WINNNN!";
+    }
+    if (computerWins === WINNER) {
+        gameEnd = true;
+        return "You LOSEEEE!"
+    }
+    return "?";
+}
+
+//Update round
+let updateRound = () => {
+    //Update point
+    playerPointDom.innerText = userWins;
+    computerPointDom.innerText = computerWins;
+    let winnerStr = checkWinner();
+    //Update result dom
+    resultDom.innerText = winnerStr;
+}
+
+// GAME PLAY
+rockBtn.addEventListener("click", (event) => {
+    if (!gameEnd) {
+        userChoice = ROCK;
+        computerChoice = getComputerChoice();
+        cmpResult(userChoice, computerChoice);
+    } else {
+        alert("Click RESTART to play the game");
+    }
+});
+
+scissorBtn.addEventListener("click", () => {
+    if (!gameEnd) {
+        userChoice = SCISSOR;
+        computerChoice = getComputerChoice();
+        cmpResult(userChoice, computerChoice);
+    } else {
+        alert("Click RESTART to play the game");
+    }
+});
+
+paperBtn.addEventListener("click", () => {
+    if (!gameEnd) {
+        userChoice = PAPER;
+        computerChoice = getComputerChoice();
+        cmpResult(userChoice, computerChoice);
+    } else {
+        alert("Click RESTART to play the game");
+    }
+});
+
+restartBtn.addEventListener("click", () => {
+    restartGame();
+    updateRound();
+});

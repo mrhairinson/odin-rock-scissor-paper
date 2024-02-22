@@ -1,13 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock-Scissor-Paper</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="./assets/images/logo.png" type="image/x-icon">
 </head>
+
 <body>
-    <h1>Welcome to Rock-Scissor-Paper game</h1>
-    <h2>Please follow the promt</h2>
+    <!-- Splash screen -->
+    <div id="splash" class="container splash">
+        <h1>Welcome to Rock-Scissor-Paper game</h1>
+        <div class="instruction">
+            <h2>Instruction</h2>
+            <p>You'll play <b>with computer</b> until you win 3 rounds first then you win! Try
+                not to be a looser! Haha</p>
+        </div>
+    </div>
+    <!-- Game play  -->
+    <div id="gameplay" class="container gameplay">
+        <h1>Please choose Rock - Scissor - Paper</h1>
+        <div id="ls-btn">
+            <button class="game_btn" id="rock"></button>
+            <button class="game_btn" id="scissor"></button>
+            <button class="game_btn" id="paper"></button>
+        </div>
+        <h2>You:</h2>
+        <div id="player"></div>
+        <h2>Computer:</h2>
+        <div id="computer"></div>
+        <br><br><br>
+        <h1>Result: <span><b id="result">?</b></span></h1>
+        <h2>Your Point: <span id="user-point">0</span></h2>
+        <h2>Computer Point: <span id="computer-point">0</span></h2>
+        <button id="restart">Restart</button>
+    </div>
     <script src="./script.js"></script>
 </body>
+
 </html>

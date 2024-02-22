@@ -1,0 +1,36 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* CSS gameplay */
+#rock {
+    background: center / contain no-repeat url("./assets/images/rock.png");
+    height: 100px;
+    width: 100px;
+}
+
+#scissor {
+    background: center / contain no-repeat url("./assets/images/scissor.png");
+    height: 100px;
+    width: 100px;
+}
+
+#paper {
+    background: center / contain no-repeat url("./assets/images/paper.png");
+    height: 100px;
+    width: 100px;
+}
+
+#computer, #player {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 100px;
+    width: 100px;
+}
